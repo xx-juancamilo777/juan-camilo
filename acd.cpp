@@ -1,61 +1,32 @@
 #include <iostream>
-#include <string>
-#include <functional>
-#include <map>
-#include <cstdlib>  // para exit
-
 using namespace std;
 
-// Definimos el tipo de función callback
-using Operacion = function<float(float, float)>;
+bool palindromo(int x) {
+   
+    if (x < 0) return false;
 
-int main(int argc, char* argv[]) {
-    if (argc != 4) {
-        cerr << "Uso: " << argv[0] << " <operando1> <operador> <operando2>\n";
-        return 1;
+    long long inicial = x;
+    long long invertido = 0;
+
+    while (x > 0) {
+        int digit = x % 10;                                                                                                                                                                
+        invertido= invertido * 10 + digit; 
+        x /= 10;                    
     }
 
-    try {
-        // Convertimos los operandos a float
-        float op1 = stof(argv[1]);
-        string operador = argv[2];
-        float op2 = stof(argv[3]);
+    return inicial == invertido;
+}
 
-        // Definimos las operaciones en un map
-        map<string, Operacion> operaciones;
-        operaciones["+"] = [](float a, float b) { return a + b; };
-        operaciones["-"] = [](float a, float b) { return a - b; };
-        operaciones["*"] = [](float a, float b) { return a * b; };
-        operaciones["x"] = operaciones["*"];  // alias para multiplicación
-        operaciones["/"] = [](float a, float b) {
-            if (b == 0) {
-                throw runtime_error("Error: División por cero.");
-            }
-            return a / b;
-        };
+int main() {
+    int x;
+    cout << "Ingrese el numero: ";
+    cin >> x;
 
-        // Verificamos si el operador es válido
-        if (operaciones.find(operador) == operaciones.end()) {
-            cerr << "Error: Operador no válido. Use +, -, *, x o /.\n";
-            return 1;
-        }
-
-        // Ejecutamos la operación
-        float resultado = operaciones[operador](op1, op2);
-        cout << "Resultado: " << resultado << endl;
-    }
-    catch (invalid_argument&) {
-        cerr << "Error: Los operandos deben ser números válidos.\n";
-        return 1;
-    }
-    catch (out_of_range&) {
-        cerr << "Error: Número fuera de rango.\n";
-        return 1;
-    }
-    catch (runtime_error& e) {
-        cerr << e.what() << endl;
-        return 1;
-    }
+    if (palindromo(x))
+        cout << "true" << endl;
+    else
+        cout << "false" << endl;
 
     return 0;
 }
+
